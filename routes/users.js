@@ -12,8 +12,8 @@ usersRouter.get('/users', (req, res) => {
       res.send(JSON.parse(data));
     })
     .catch((err) => {
-      // eslint-disable-next-line no-console
-      console.log(err);
+      res.status(500);
+      res.send(err.message);
     });
 });
 
@@ -29,8 +29,8 @@ usersRouter.get('/users/:id', (req, res) => {
       res.send(JSON.parse(data).find((item) => item._id === id));
     })
     .catch((err) => {
-      // eslint-disable-next-line no-console
-      console.log(err);
+      res.status(500);
+      res.send(err.message);
     });
 });
 
