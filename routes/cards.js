@@ -13,8 +13,8 @@ cardsRouter.get('/cards', (req, res) => {
       res.send(JSON.parse(data));
     })
     .catch((err) => {
-      // eslint-disable-next-line no-console
-      console.log(err);
+      res.status(500);
+      res.send(err.message);
     });
 });
 
