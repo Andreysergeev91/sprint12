@@ -1,20 +1,37 @@
 const usersRouter = require('express').Router();
 
-const users = require('../data/users');
+const fsPromises = require('fs').promises;
+
+const path = require('path');
+
+const usersPath = path.join('data', 'users.json');
 
 usersRouter.get('/users', (req, res) => {
-  res.send(users);
+  fsPromises.readFile(usersPath, { encoding: 'utf8' })
+    .then((data) => {
+      res.send(JSON.parse(data));
+    })
+    .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    });
 });
 
 usersRouter.get('/users/:id', (req, res) => {
   const { id } = req.params;
 
-  if (!(users.some((item) => item['_id'] === id))) {
-    res.send({ message: 'Нет пользователя с таким id' });
-    return;
-  }
-
-  res.send(users.find((item) => item['_id'] === id));
+  fsPromises.readFile(usersPath, { encoding: 'utf8' })
+    .then((data) => {
+      if (!(JSON.parse(data).some((item) => item._id === id))) {
+        res.send({ message: 'Нет пользователя с таким id' });
+        return;
+      }
+      res.send(JSON.parse(data).find((item) => item._id === id));
+    })
+    .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    });
 });
 
 module.exports = usersRouter;
